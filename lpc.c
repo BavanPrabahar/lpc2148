@@ -1,4 +1,6 @@
 #include<lpc214x.h>
+#include<Wire.h>
+
 int i=1;
 int j=1;
 void ein(void)__irq{
@@ -11,6 +13,10 @@ if(j==1){
 for(i=0;i<7;i++)
 {
 U1THR = a[i];
+char c=a[i];
+Wire.beginTransmission(0x3c);
+Wire.write(c);
+Wire.endTransmission();
 while(!(U1LSR & 0x20));
 
 }
@@ -21,7 +27,7 @@ EXTINT=2;
 VICVectAddr=0;
 }
 int main(){
-
+Wire.begin();
 char a[9]={' ','c','l','o','s','e','d'};
 PINSEL0=(3<<6)|(2<<14)|(5<<16);
 U1LCR = 0x83;
@@ -52,6 +58,9 @@ if(i==1){
 for(i=0;i<7;i++)
 {
 U1THR = a[i];
+Wire.beginTransmission(0x3c);
+Wire.write(c);
+Wire.endTransmission();
 while(!(U1LSR & 0x20));
 }
 i++;
